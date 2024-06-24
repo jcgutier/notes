@@ -1,65 +1,61 @@
-+++
-title = 'AWS Certified Developer'
-date = 2024-06-22T18:16:00-07:00
-+++
-# AWS certified developer
-
-AWS certified developer notes.
+---
+title: "AWS Certified Developer"
+date: 2024-06-22T18:16:00-07:00
+---
 
 Content
 
-- [AWS certified developer](#aws-certified-developer)
-  - [IAM](#iam)
-    - [IAM Access Analyzer](#iam-access-analyzer)
-    - [Access Advisor feature on IAM console](#access-advisor-feature-on-iam-console)
-  - [EC2](#ec2)
-    - [Dedicated Instances](#dedicated-instances)
-    - [Spot Instances](#spot-instances)
-    - [Dedicated Hosts](#dedicated-hosts)
-    - [On-Demand Instances](#on-demand-instances)
-    - [EBS](#ebs)
-    - [Autoscaling](#autoscaling)
-  - [Billing](#billing)
-  - [RDS](#rds)
-    - [Multi-AZ](#multi-az)
-  - [DynamoDB](#dynamodb)
-    - [RCU and WCU](#rcu-and-wcu)
-    - [TTL](#ttl)
-    - [DAX](#dax)
-    - [AWS CLI](#aws-cli)
-    - [Transactions](#transactions)
-  - [API Gateway](#api-gateway)
-  - [CDK](#cdk)
-    - [Constructs](#constructs)
-  - [Cognito](#cognito)
-  - [KMS](#kms)
-  - [S3](#s3)
-    - [Encryption](#encryption)
-  - [VPC](#vpc)
-    - [VPC endpoint](#vpc-endpoint)
-  - [ECS](#ecs)
-  - [EFS](#efs)
-  - [CloudFront](#cloudfront)
-  - [Serverless](#serverless)
-    - [AWS Lambda](#aws-lambda)
-    - [SAM](#sam)
-  - [Cloud Watch](#cloud-watch)
-  - [Elastic Beanstalk](#elastic-beanstalk)
-  - [SQS](#sqs)
-  - [API calls](#api-calls)
-  - [Networking](#networking)
-  - [AWS CDK](#aws-cdk)
-  - [ELB](#elb)
-  - [Elastic Cache](#elastic-cache)
-  - [Lazy Loading](#lazy-loading)
-  - [Write-through](#write-through)
-  - [Adding TTL](#adding-ttl)
-  - [Secrets Manager](#secrets-manager)
-  - [APP Sync](#app-sync)
-  - [Amazon Cognito](#amazon-cognito)
-  - [Code Commit](#code-commit)
-  - [Code Deploy](#code-deploy)
-  - [Cloud Formation](#cloud-formation)
+- [IAM](#iam)
+  - [IAM Access Analyzer](#iam-access-analyzer)
+  - [Access Advisor feature on IAM console](#access-advisor-feature-on-iam-console)
+- [EC2](#ec2)
+  - [Dedicated Instances](#dedicated-instances)
+  - [Spot Instances](#spot-instances)
+  - [Dedicated Hosts](#dedicated-hosts)
+  - [On-Demand Instances](#on-demand-instances)
+  - [EBS](#ebs)
+  - [Autoscaling](#autoscaling)
+- [Billing](#billing)
+- [RDS](#rds)
+  - [Multi-AZ](#multi-az)
+- [DynamoDB](#dynamodb)
+  - [RCU and WCU](#rcu-and-wcu)
+  - [TTL](#ttl)
+  - [DAX](#dax)
+  - [AWS CLI](#aws-cli)
+  - [Transactions](#transactions)
+- [API Gateway](#api-gateway)
+- [CDK](#cdk)
+  - [Constructs](#constructs)
+- [Cognito](#cognito)
+- [KMS](#kms)
+- [S3](#s3)
+  - [Encryption](#encryption)
+- [VPC](#vpc)
+  - [VPC endpoint](#vpc-endpoint)
+- [ECS](#ecs)
+- [EFS](#efs)
+- [CloudFront](#cloudfront)
+- [Serverless](#serverless)
+  - [AWS Lambda](#aws-lambda)
+  - [SAM](#sam)
+- [Cloud Watch](#cloud-watch)
+- [Elastic Beanstalk](#elastic-beanstalk)
+- [SQS](#sqs)
+- [API calls](#api-calls)
+- [Networking](#networking)
+- [AWS CDK](#aws-cdk)
+- [ELB](#elb)
+- [Elastic Cache](#elastic-cache)
+- [Lazy Loading](#lazy-loading)
+- [Write-through](#write-through)
+- [Adding TTL](#adding-ttl)
+- [Secrets Manager](#secrets-manager)
+- [APP Sync](#app-sync)
+- [Amazon Cognito](#amazon-cognito)
+- [Code Commit](#code-commit)
+- [Code Deploy](#code-deploy)
+- [Cloud Formation](#cloud-formation)
 
 ## IAM
 
@@ -404,6 +400,12 @@ AWS Elastic Beanstalk makes it easy to create new environments for your applicat
 
 Deploy using 'Rolling with additional batch' deployment policy - With this method, Elastic Beanstalk launches an extra batch of instances, then performs a rolling deployment. Launching the extra batch takes time, and ensures that the same bandwidth is retained throughout the deployment. This policy also avoids any reduced availability, although at a cost of an even longer deployment time compared to the Rolling method. Finally, this option is suitable if you must maintain the same bandwidth throughout the deployment.
 
+To configure _Elastic Beanstalk_ for details like provisioning resources or monitoring the configuration muts follow the naming convention:
+
+```bash
+.ebextensions/<mysettings>.config
+```
+
 ## SQS
 
 The minimum message size is 1 byte (1 character). The maximum is 262,144 bytes (256 KB).
@@ -494,4 +496,4 @@ A CloudFormation template has an optional Outputs section which declares output 
 
 Conditions cannot be used within the Parameters section. After you define all your conditions, you can associate them with resources and resource properties only in the Resources and Outputs sections of a template.
 
-Question 31
+Question 34
