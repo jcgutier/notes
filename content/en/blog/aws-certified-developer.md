@@ -1,8 +1,11 @@
-+++
-title = 'AWS Certified Developer'
-date = 2024-06-22T18:16:00-07:00
-description = 'Notes for AWS Certified Developer exam'
-+++
+---
+title: "AWS Certified Developer"
+date: 2024-06-22T18:16:00-07:00
+description: "Notes for AWS Certified Developer exam"
+headline: true
+---
+
+Notes for AWS Certified Developer
 
 ## IAM
 
