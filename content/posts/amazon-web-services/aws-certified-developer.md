@@ -68,6 +68,8 @@ You manage access in AWS by creating policies and attaching them to IAM identiti
 
 Trust policy - Trust policies define which principal entities (accounts, users, roles, and federated users) can assume the role. An IAM role is both an identity and a resource that supports resource-based policies. For this reason, you must attach both a trust policy and an identity-based policy to an IAM role. The IAM service supports only one type of resource-based policy called a role trust policy, which is attached to an IAM role.
 
+IAM is used as a certificate manager only when you must support HTTPS connections in a Region that is not supported by ACM. IAM securely encrypts your private keys and stores the encrypted version in IAM SSL certificate storage. IAM supports deploying server certificates in all Regions, but you must obtain your certificate from an external provider for use with AWS. You cannot upload an ACM certificate to IAM. Additionally, you cannot manage your certificates from the IAM Console.
+
 ### IAM Access Analyzer
 
 AWS IAM Access Analyzer helps you identify the resources in your organization and accounts, such as Amazon S3 buckets or IAM roles, that are shared with an external entity. This lets you identify unintended access to your resources and data, which is a security risk.
@@ -114,6 +116,10 @@ Is the storage for EC2 over the network, it support in-flight and at rest encryp
 A scaling policy instructs Amazon EC2 Auto Scaling to track a specific CloudWatch metric, and it defines what action to take when the associated CloudWatch alarm is in ALARM.
 
 When a scaling policy is executed, if the capacity calculation produces a number outside of the minimum and maximum size range of the group, Amazon EC2 Auto Scaling ensures that the new capacity never goes outside of the minimum and maximum size limits.
+
+Auto Scaling groups cannot span across multiple Regions.
+
+An Auto Scaling group can contain EC2 instances in one or more Availability Zones within the same Region
 
 ## Billing
 
@@ -185,6 +191,8 @@ With deployment stages in Amazon API Gateway, you can manage multiple release st
 aliases.
 
 An Amazon API Gateway Lambda authorizer (formerly known as a custom authorizer) is a Lambda function that you provide to control access to your API. A Lambda authorizer uses bearer token authentication strategies, such as OAuth or SAML. Before creating an API Gateway Lambda authorizer, you must first create the AWS Lambda function that implements the logic to authorize and, if necessary, to authenticate the caller.
+
+API Gateway provides a few strategies for optimizing your API to improve responsiveness, like response caching and payload compression. You can enable API caching in Amazon API Gateway to cache your endpoint's responses.
 
 ## CDK
 
@@ -382,7 +390,7 @@ This service offers the next deployment types:
 
 - All at once
 - Rolling
-- Rolling with an additional batch
+- Rolling with an additional batch (This increase the costs as you're adding extra instances during the deployment)
 - Immutable
 - Traffic splitting
 
@@ -442,6 +450,8 @@ If an ELB does not have any registered target it will reply with _HTTP 503: Serv
 
 You must ensure that your load balancer can communicate with registered targets on both the listener port and the health check port. Whenever you add a listener to your load balancer or update the health check port for a target group used by the load balancer to route requests, you must verify that the security groups associated with the load balancer allow traffic on the new port in both directions.
 
+The nodes for a load balancer distribute requests from clients to registered targets. When cross-zone load balancing is enabled, each load balancer node distributes traffic across the registered targets in all enabled Availability Zones. When cross-zone load balancing is disabled, each load balancer node distributes traffic only across the registered targets in its Availability Zone. With Application Load Balancers, cross-zone load balancing is always enabled.
+
 ## Elastic Cache
 
 Elastic cache has the following strategies for cache:
@@ -496,4 +506,4 @@ A CloudFormation template has an optional Outputs section which declares output 
 
 Conditions cannot be used within the Parameters section. After you define all your conditions, you can associate them with resources and resource properties only in the Resources and Outputs sections of a template.
 
-Question 34
+Question 42
