@@ -25,6 +25,7 @@ Content
   - [AWS CLI](#aws-cli)
   - [Transactions](#transactions)
 - [API Gateway](#api-gateway)
+  - [Usage Plan](#usage-plan)
 - [CDK](#cdk)
   - [Constructs](#constructs)
 - [Cognito](#cognito)
@@ -56,6 +57,9 @@ Content
 - [Code Commit](#code-commit)
 - [Code Deploy](#code-deploy)
 - [Cloud Formation](#cloud-formation)
+- [x-Ray](#x-ray)
+  - [X-Ray sampling](#x-ray-sampling)
+  - [EC2 X-Ray Daemon](#ec2-x-ray-daemon)
 
 ## IAM
 
@@ -194,6 +198,10 @@ An Amazon API Gateway Lambda authorizer (formerly known as a custom authorizer) 
 
 API Gateway provides a few strategies for optimizing your API to improve responsiveness, like response caching and payload compression. You can enable API caching in Amazon API Gateway to cache your endpoint's responses.
 
+### Usage Plan
+
+A usage plan specifies who can access one or more deployed API stages and methods—and also how much and how fast they can access them. The plan uses API keys to identify API clients and meters access to the associated API stages for each key.
+
 ## CDK
 
 CDK allows to write the infrastructure in a general programming language. CDK builds cloud formation templates.
@@ -321,6 +329,8 @@ VPC endpoints allow communication between instances in the VPC and AWS services 
 When using ECS cluster with ASG, the instances have the cluster configuration, like cluster name, in the file `/etc/ecs/ecs.config`, this must be configured on bootstrap
 
 If a container instance is terminated while it is in STOPPED status it will lead to synchronization and it won't be automatically removed from the cluster
+
+If you use a target tracking scaling policy based on a custom Amazon SQS queue metric, dynamic scaling can adjust to the demand curve of your application more effectively. To illustrate with an example, let's say that the current ApproximateNumberOfMessages is 1500 and the fleet's running capacity is 10. If the average processing time is 0.1 seconds for each message and the longest acceptable latency is 10 seconds, then the acceptable backlog per instance is 10 / 0.1, which equals 100. This means that 100 is the target value for your target tracking policy. If the backlog per instance is currently at 150 (1500 / 10), your fleet scales out, and it scales out by five instances to maintain proportion to the target value.
 
 ## EFS
 
@@ -506,4 +516,49 @@ A CloudFormation template has an optional Outputs section which declares output 
 
 Conditions cannot be used within the Parameters section. After you define all your conditions, you can associate them with resources and resource properties only in the Resources and Outputs sections of a template.
 
-Question 42
+he intrinsic function Fn::FindInMap returns the value corresponding to keys in a two-level map that is declared in the Mappings section. YAML Syntax for the full function name: Fn::FindInMap: [ MapName, TopLevelKey, SecondLevelKey ]
+
+Short form of the above syntax is : !FindInMap [ MapName, TopLevelKey, SecondLevelKey ], example:
+
+```
+Mappings:
+  RegionMap:
+    us-east-1:
+      HVM64: "ami-0ff8a91507f77f867"
+      HVMG2: "ami-0a584ac55a7631c0c"
+    us-west-1:
+      HVM64: "ami-0bdb828fd58c52235"
+      HVMG2: "ami-066ee5fd4a9ef77f1"
+    eu-west-1:
+      HVM64: "ami-047bb4163c506cd98"
+      HVMG2: "ami-31c2f645"
+    ap-southeast-1:
+      HVM64: "ami-08569b978cc4dfa10"
+      HVMG2: "ami-0be9df32ae9f92309"
+    ap-northeast-1:
+      HVM64: "ami-06cd52961ce9f0d85"
+      HVMG2: "ami-053cdd503598e4a9d"
+Resources:
+  myEC2Instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: !FindInMap
+        - RegionMap
+        - !Ref 'AWS::Region'
+        - HVM64
+      InstanceType: m1.small
+```
+
+## x-Ray
+
+### X-Ray sampling
+
+By customizing sampling rules, you can control the amount of data that you record, and modify sampling behavior on the fly without modifying or redeploying your code. Sampling rules tell the X-Ray SDK how many requests to record for a set of criteria. X-Ray SDK applies a sampling algorithm to determine which requests get traced
+
+### EC2 X-Ray Daemon
+
+The AWS X-Ray daemon is a software application that listens for traffic on UDP port 2000, gathers raw segment data, and relays it to the AWS X-Ray API. The daemon logs could help with figuring out the problem.
+
+The X-Ray daemon uses the AWS SDK to upload trace data to X-Ray, and it needs AWS credentials with permission to do that. On Amazon EC2, the daemon uses the instance's instance profile role automatically. Eliminates API permission issues (in case the role doesn't have IAM permissions to write data to the X-Ray service)
+
+Question 56
