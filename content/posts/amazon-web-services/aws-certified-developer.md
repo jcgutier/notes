@@ -228,6 +228,14 @@ Envelope encryption is the practice of encrypting plaintext data with a data key
 data key under another key. You must store the encrypted form of the data key so that you can use the data key
 to decrypt the encrypted data in the database.
 
+KMS stores the CMK, and receives data from the clients, which it encrypts and sends back
+
+A customer master key (CMK) is a logical representation of a master key. The CMK includes metadata, such as the key ID, creation date, description, and key state. The CMK also contains the key material used to encrypt and decrypt data. You can generate CMKs in KMS, in an AWS CloudHSM cluster, or import them from your key management infrastructure.
+
+AWS KMS supports symmetric and asymmetric CMKs. A symmetric CMK represents a 256-bit key that is used for encryption and decryption. An asymmetric CMK represents an RSA key pair that is used for encryption and decryption or signing and verification (but not both), or an elliptic curve (ECC) key pair that is used for signing and verification.
+
+AWS KMS supports three types of CMKs: customer-managed CMKs, AWS managed CMKs, and AWS owned CMKs.
+
 ## S3
 
 Which policy condition allows you to enforce SSL requests to objects stored in your S3 bucket? `aws:SecureTransport`
@@ -424,6 +432,8 @@ To configure _Elastic Beanstalk_ for details like provisioning resources or moni
 .ebextensions/<mysettings>.config
 ```
 
+Any resources created as part of your `.ebextensions` is part of your Elastic Beanstalk template and will get deleted if the environment is terminated.
+
 ## SQS
 
 The minimum message size is 1 byte (1 character). The maximum is 262,144 bytes (256 KB).
@@ -561,4 +571,4 @@ The AWS X-Ray daemon is a software application that listens for traffic on UDP p
 
 The X-Ray daemon uses the AWS SDK to upload trace data to X-Ray, and it needs AWS credentials with permission to do that. On Amazon EC2, the daemon uses the instance's instance profile role automatically. Eliminates API permission issues (in case the role doesn't have IAM permissions to write data to the X-Ray service)
 
-Question 56
+Question 58
