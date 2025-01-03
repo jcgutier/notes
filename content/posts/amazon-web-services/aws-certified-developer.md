@@ -8,6 +8,7 @@ Content
 - [IAM](#iam)
   - [IAM Access Analyzer](#iam-access-analyzer)
   - [Access Advisor feature on IAM console](#access-advisor-feature-on-iam-console)
+- [IAM policy variables](#iam-policy-variables)
 - [EC2](#ec2)
   - [Dedicated Instances](#dedicated-instances)
   - [Spot Instances](#spot-instances)
@@ -16,7 +17,8 @@ Content
   - [EBS](#ebs)
   - [Autoscaling](#autoscaling)
 - [Billing](#billing)
-- [RDS](#rds)
+- [Amazon RDS](#amazon-rds)
+  - [Read replicas](#read-replicas)
   - [Multi-AZ](#multi-az)
 - [DynamoDB](#dynamodb)
   - [RCU and WCU](#rcu-and-wcu)
@@ -29,6 +31,7 @@ Content
 - [CDK](#cdk)
   - [Constructs](#constructs)
 - [Cognito](#cognito)
+  - [Cognito User Pools](#cognito-user-pools)
 - [KMS](#kms)
 - [S3](#s3)
   - [Encryption](#encryption)
@@ -60,6 +63,10 @@ Content
 - [x-Ray](#x-ray)
   - [X-Ray sampling](#x-ray-sampling)
   - [EC2 X-Ray Daemon](#ec2-x-ray-daemon)
+- [AWS Budget](#aws-budget)
+- [Route 53](#route-53)
+  - [CNAME](#cname)
+  - [Geolocation](#geolocation)
 
 ## IAM
 
@@ -80,9 +87,17 @@ AWS IAM Access Analyzer helps you identify the resources in your organization an
 
 You can set the scope for the analyzer to an organization or an AWS account. This is your zone of trust. The analyzer scans all of the supported resources within your zone of trust. When Access Analyzer finds a policy that allows access to a resource from outside of your zone of trust, it generates an active finding.
 
+IAM Access Analyzer simplifies inspecting unused access to guide you toward least privilege. Security teams can use IAM Access Analyzer to gain visibility into unused access across their AWS organization and automate how they rightsize permissions. When the unused access analyzer is enabled, IAM Access Analyzer continuously analyzes your accounts to identify unused access and creates a centralized dashboard with findings. The findings highlight unused roles, unused access keys for IAM users, and unused passwords for IAM users. For active IAM roles and users, the findings provide visibility into unused services and actions.
+
 ### Access Advisor feature on IAM console
 
 Helps identify the unused roles, IAM reports the last-used timestamp that represents when a role was last used to make an AWS request. Your security team can use this information to identify, analyze, and then confidently remove unused roles. This helps improve the security posture of your AWS environments. This does not provide information about non-IAM entities such as S3, hence it's not a correct choice here.
+
+## IAM policy variables
+
+Instead of creating individual policies for each user, you can use policy variables and create a single policy that applies to multiple users (a group policy). Policy variables act as placeholders. When you make a request to AWS, the placeholder is replaced by a value from the request when the policy is evaluated.
+
+As an example, the following policy gives each of the users in the group full programmatic access to a user-specific object (their own "home directory") in Amazon S3.
 
 ## EC2
 
@@ -131,7 +146,7 @@ To enable billing for IAM users root user must enable on Profile -> Account -> I
 
 By default, IAM users do not have access to the AWS Billing and Cost Management console. You or your account administrator must grant users access. You can do this by activating IAM user access to the Billing and Cost Management console and attaching an IAM policy to your users. Then, you need to activate IAM user access for IAM policies to take effect. You only need to activate IAM user access once.
 
-## RDS
+## Amazon RDS
 
 Relational database service is a managed service Which provides database engines.
 
@@ -140,6 +155,10 @@ The data is replicated asynchronously to read replicas.
 RDS MySQL and RDS PostGreSQL can be configured with IAM Database Authentication
 
 RDS MySQL has storage autoscaling feature.
+
+### Read replicas
+
+Amazon RDS uses the PostgreSQL DB engine's built-in replication functionality to create a special type of DB instance called a read replica from a source DB instance. The source DB instance becomes the primary DB instance. Updates made to the primary DB instance are asynchronously copied to the read replica. You can reduce the load on your primary DB instance by routing read queries from your applications to the read replica. Using read replicas, you can elastically scale out beyond the capacity constraints of a single DB instance for read-heavy database workloads. For the given use case, you can achieve optimum read performance for SQL queries by using the read-replica endpoint for the read-heavy workload.
 
 ### Multi-AZ
 
@@ -217,6 +236,14 @@ There 3 level of constructs:
 ## Cognito
 
 Cognito have a _post authentication hook_ for AWS Lambda to do any action after a login.
+
+### Cognito User Pools
+
+After successful authentication, Amazon Cognito returns user pool tokens to your app. You can use the tokens to grant your users access to your own server-side resources, or to the Amazon API Gateway.
+
+Amazon Cognito user pools implement ID, access, and refresh tokens as defined by the OpenID Connect (OIDC) open standard.
+
+The ID token is a JSON Web Token (JWT) that contains claims about the identity of the authenticated user such as name, email, and phone_number. You can use this identity information inside your application. The ID token can also be used to authenticate users against your resource servers or server applications.
 
 ## KMS
 
@@ -404,6 +431,8 @@ ou can configure an AWS Lambda function to pull in additional code and content i
 
 ## Elastic Beanstalk
 
+Elastic Beanstalk allows developers just wants to focus on writing application code without worrying about server provisioning
+
 This service offers the next deployment types:
 
 - All at once
@@ -570,5 +599,23 @@ By customizing sampling rules, you can control the amount of data that you recor
 The AWS X-Ray daemon is a software application that listens for traffic on UDP port 2000, gathers raw segment data, and relays it to the AWS X-Ray API. The daemon logs could help with figuring out the problem.
 
 The X-Ray daemon uses the AWS SDK to upload trace data to X-Ray, and it needs AWS credentials with permission to do that. On Amazon EC2, the daemon uses the instance's instance profile role automatically. Eliminates API permission issues (in case the role doesn't have IAM permissions to write data to the X-Ray service)
+
+## AWS Budget
+
+AWS requires approximately 5 weeks of usage data to generate budget forecasts
+
+## Route 53
+
+### CNAME
+
+A CNAME record maps DNS queries for the name of the current record, such as acme.example.com, to another domain (example.com or example.net) or subdomain (acme.example.com or zenith.example.org).
+
+CNAME records can be used to map one domain name to another. Although you should keep in mind that the DNS protocol does not allow you to create a CNAME record for the top node of a DNS namespace, also known as the zone apex. For example, if you register the DNS name example.com, the zone apex is example.com. You cannot create a CNAME record for example.com, but you can create CNAME records for www.example.com, newproduct.example.com, and so on.
+
+### Geolocation
+
+Geolocation routing lets you choose the resources that serve your traffic based on the geographic location of your users, meaning the location that DNS queries originate from. For example, you might want all queries from Europe to be routed to an ELB load balancer in the Frankfurt region. You can also use geolocation routing to restrict distribution of content to only the locations in which you have distribution rights
+
+You can create a default record that handles both queries from IP addresses that aren't mapped to any location and queries that come from locations that you haven't created geolocation records for. If you don't create a default record, Route 53 returns a "no answer" response for queries from those locations.
 
 Question 58
