@@ -8,7 +8,7 @@ Content
 - [IAM](#iam)
   - [IAM Access Analyzer](#iam-access-analyzer)
   - [Access Advisor feature on IAM console](#access-advisor-feature-on-iam-console)
-- [IAM policy variables](#iam-policy-variables)
+  - [IAM policy variables](#iam-policy-variables)
 - [EC2](#ec2)
   - [Dedicated Instances](#dedicated-instances)
   - [Spot Instances](#spot-instances)
@@ -91,13 +91,35 @@ IAM Access Analyzer simplifies inspecting unused access to guide you toward leas
 
 ### Access Advisor feature on IAM console
 
-Helps identify the unused roles, IAM reports the last-used timestamp that represents when a role was last used to make an AWS request. Your security team can use this information to identify, analyze, and then confidently remove unused roles. This helps improve the security posture of your AWS environments. This does not provide information about non-IAM entities such as S3, hence it's not a correct choice here.
+Helps identify the unused roles, IAM reports the last-used timestamp that represents when a role was last used to make an AWS request. Your security team can use this information to identify, analyze, and then confidently remove unused roles. This helps improve the security posture of your AWS environments.
 
-## IAM policy variables
+### IAM policy variables
 
 Instead of creating individual policies for each user, you can use policy variables and create a single policy that applies to multiple users (a group policy). Policy variables act as placeholders. When you make a request to AWS, the placeholder is replaced by a value from the request when the policy is evaluated.
 
 As an example, the following policy gives each of the users in the group full programmatic access to a user-specific object (their own "home directory") in Amazon S3.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:ListBucket"],
+      "Resource": ["arn:aws:s3:::amzn-s3-demo-bucket"],
+      "Condition": {"StringLike": {"s3:prefix": ["${aws:username}/*"]}}
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": ["arn:aws:s3:::amzn-s3-demo-bucket/${aws:username}/*"]
+    }
+  ]
+}
+```
 
 ## EC2
 
@@ -617,5 +639,3 @@ CNAME records can be used to map one domain name to another. Although you should
 Geolocation routing lets you choose the resources that serve your traffic based on the geographic location of your users, meaning the location that DNS queries originate from. For example, you might want all queries from Europe to be routed to an ELB load balancer in the Frankfurt region. You can also use geolocation routing to restrict distribution of content to only the locations in which you have distribution rights
 
 You can create a default record that handles both queries from IP addresses that aren't mapped to any location and queries that come from locations that you haven't created geolocation records for. If you don't create a default record, Route 53 returns a "no answer" response for queries from those locations.
-
-Question 58
