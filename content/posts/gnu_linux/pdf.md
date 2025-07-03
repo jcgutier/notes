@@ -1,5 +1,5 @@
 
-
+- [Remove password on PDF](#remove-password-on-pdf)
 
 # Remove password on PDF
 
