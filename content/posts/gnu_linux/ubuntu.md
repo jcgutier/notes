@@ -46,3 +46,7 @@ network:
           password: MyPass #wifi passwd
 ```
 The config is generated with `netplan generate` and applied with `netplan apply`
+
+To identify the interfaces available on the system run: `lshw -class network`.
+
+To see the the network interface setting run: `ethtool eth4`, where `eth4` is the network interface name
